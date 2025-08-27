@@ -63,7 +63,7 @@ const PricingSection: React.FC = () => {
         'نسخ احتياطية أسبوعية',
         'تحديثات النظام'
       ],
-      color: 'from-blue-500 to-blue-600',
+                      color: 'from-green-700 to-green-800',
       icon: <FileText className="h-8 w-8" />
     },
     {
@@ -88,7 +88,7 @@ const PricingSection: React.FC = () => {
         'إدارة الصلاحيات المتقدمة',
         'تدريب المستخدمين'
       ],
-      color: 'from-green-500 to-green-600',
+      color: 'from-green-700 to-green-800',
       icon: <TrendingUp className="h-8 w-8" />
     },
     {
@@ -113,7 +113,7 @@ const PricingSection: React.FC = () => {
         'استشارات تقنية مخصصة',
         'API متقدم للتطوير'
       ],
-      color: 'from-purple-500 to-purple-600',
+      color: 'from-green-800 to-green-900',
       icon: <Globe className="h-8 w-8" />
     }
   ];
@@ -194,8 +194,8 @@ const PricingSection: React.FC = () => {
         <div className="relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
             خطط الاشتراك
-            <span className="block text-4xl md:text-5xl text-green-600 dark:text-green-400 mt-2">
-              اختر الخطة المناسبة لك
+            <span className="block text-4xl md:text-5xl text-green-700 dark:text-green-300 mt-2">
+              اختر الخطة المناسبة لمكتبك القانوني
             </span>
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
@@ -258,7 +258,7 @@ const PricingSection: React.FC = () => {
             {/* Recommended Badge */}
             {plan.isRecommended && (
               <div className="absolute -top-4 right-4">
-                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+                <div className="bg-gradient-to-r from-green-700 to-green-800 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">
                   موصى به
                 </div>
               </div>

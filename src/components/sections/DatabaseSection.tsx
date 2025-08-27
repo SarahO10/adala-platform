@@ -152,7 +152,7 @@ const DatabaseSection: React.FC = () => {
         <div className="relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
             قاعدة البيانات القانونية
-            <span className="block text-4xl md:text-5xl text-green-600 dark:text-green-400 mt-2">
+            <span className="block text-4xl md:text-5xl text-green-700 dark:text-green-300 mt-2">
               مكتبة شاملة للقوانين واللوائح السعودية
             </span>
           </h1>
@@ -196,10 +196,10 @@ const DatabaseSection: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">إجمالي المشاهدات</p>
-              <p className="text-3xl font-bold text-blue-600">{totalViews.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-green-700 dark:text-green-300">{totalViews.toLocaleString()}</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-800 dark:to-blue-900 rounded-xl flex items-center justify-center">
-              <Eye className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 rounded-xl flex items-center justify-center">
+              <Eye className="h-6 w-6 text-green-700 dark:text-green-300" />
             </div>
           </div>
         </div>
@@ -208,10 +208,10 @@ const DatabaseSection: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">إجمالي التحميلات</p>
-              <p className="text-3xl font-bold text-orange-600">{totalDownloads.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-green-700 dark:text-green-300">{totalDownloads.toLocaleString()}</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-800 dark:to-orange-900 rounded-xl flex items-center justify-center">
-              <Download className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+            <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 rounded-xl flex items-center justify-center">
+              <Download className="h-6 w-6 text-green-700 dark:text-green-300" />
             </div>
           </div>
         </div>
@@ -220,10 +220,10 @@ const DatabaseSection: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">المحفوظات</p>
-              <p className="text-3xl font-bold text-purple-600">{bookmarkedCount}</p>
+              <p className="text-3xl font-bold text-green-700 dark:text-green-300">{bookmarkedCount}</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-800 dark:to-purple-900 rounded-xl flex items-center justify-center">
-              <Bookmark className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 rounded-xl flex items-center justify-center">
+              <Bookmark className="h-6 w-6 text-green-700 dark:text-green-300" />
             </div>
           </div>
         </div>
@@ -349,7 +349,7 @@ const DatabaseSection: React.FC = () => {
                         e.stopPropagation();
                         // Handle download
                       }}
-                      className="p-2 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/20 rounded-lg transition-colors duration-200"
+                      className="p-2 text-green-700 hover:text-green-800 dark:text-green-300 dark:hover:text-green-200 hover:bg-green-100 dark:hover:bg-green-900/20 rounded-lg transition-colors duration-200"
                     >
                       <Download className="h-4 w-4" />
                     </button>
@@ -358,7 +358,7 @@ const DatabaseSection: React.FC = () => {
                         e.stopPropagation();
                         // Handle share
                       }}
-                      className="p-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded-lg transition-colors duration-200"
+                      className="p-2 text-green-700 hover:text-green-800 dark:text-green-300 dark:hover:text-green-200 hover:bg-green-100 dark:hover:bg-green-900/20 rounded-lg transition-colors duration-200"
                     >
                       <Share className="h-4 w-4" />
                     </button>

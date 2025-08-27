@@ -279,7 +279,7 @@ const UsersSection: React.FC = () => {
         <div className="relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
             إدارة المستخدمين
-            <span className="block text-4xl md:text-5xl text-green-600 dark:text-green-400 mt-2">
+            <span className="block text-4xl md:text-5xl text-green-700 dark:text-green-300 mt-2">
               إدارة الفرق والصلاحيات والأدوار
             </span>
           </h1>
@@ -329,10 +329,10 @@ const UsersSection: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">المستخدمين النشطين</p>
-              <p className="text-3xl font-bold text-blue-600">{activeUsers}</p>
+              <p className="text-3xl font-bold text-green-700 dark:text-green-300">{activeUsers}</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-800 dark:to-blue-900 rounded-xl flex items-center justify-center">
-              <CheckCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 rounded-xl flex items-center justify-center">
+              <CheckCircle className="h-6 w-6 text-green-700 dark:text-green-300" />
             </div>
           </div>
         </div>
@@ -341,10 +341,10 @@ const UsersSection: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">إجمالي الأدوار</p>
-              <p className="text-3xl font-bold text-orange-600">{totalRoles}</p>
+              <p className="text-3xl font-bold text-green-700 dark:text-green-300">{totalRoles}</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-800 dark:to-orange-900 rounded-xl flex items-center justify-center">
-              <Shield className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+            <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 rounded-xl flex items-center justify-center">
+              <Shield className="h-6 w-6 text-green-700 dark:text-green-300" />
             </div>
           </div>
         </div>
@@ -353,10 +353,10 @@ const UsersSection: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">مديري النظام</p>
-              <p className="text-3xl font-bold text-purple-600">{systemAdmins}</p>
+              <p className="text-3xl font-bold text-green-700 dark:text-green-300">{systemAdmins}</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-800 dark:to-purple-900 rounded-xl flex items-center justify-center">
-              <Key className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 rounded-xl flex items-center justify-center">
+              <Key className="h-6 w-6 text-green-700 dark:text-green-300" />
             </div>
           </div>
         </div>
@@ -637,7 +637,7 @@ const UsersSection: React.FC = () => {
                     <label key={permission} className="flex items-center space-x-2 space-x-reverse">
                       <input
                         type="checkbox"
-                        className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                        className="rounded border-gray-300 text-green-700 focus:ring-green-600"
                         checked={newUser.permissions.includes(permission)}
                         onChange={(e) => {
                           if (e.target.checked) {
@@ -715,7 +715,7 @@ const UsersSection: React.FC = () => {
                     <label key={permission} className="flex items-center space-x-2 space-x-reverse">
                       <input
                         type="checkbox"
-                        className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                        className="rounded border-gray-300 text-green-700 focus:ring-green-600"
                         checked={newRole.permissions.includes(permission)}
                         onChange={(e) => {
                           if (e.target.checked) {

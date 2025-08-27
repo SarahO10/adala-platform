@@ -87,7 +87,7 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ onSectionChange }) =>
         <div className="relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
             منصة عدالة
-            <span className="block text-4xl md:text-5xl text-green-600 dark:text-green-400 mt-2">
+            <span className="block text-4xl md:text-5xl text-green-700 dark:text-green-300 mt-2">
               المنصة القانونية المتكاملة
             </span>
           </h1>
@@ -130,7 +130,7 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ onSectionChange }) =>
             {stats.map((stat, index) => (
               <div key={index} className="text-center group">
                 <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <div className="text-green-600 dark:text-green-400">
+                  <div className="text-green-700 dark:text-green-300">
                     {stat.icon}
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Header from './components/Header';
-import Sidebar from './components/Sidebar';
+
 import OverviewSection from './components/sections/OverviewSection';
 import CasesSection from './components/sections/CasesSection';
 import DatabaseSection from './components/sections/DatabaseSection';
@@ -95,19 +95,9 @@ const App: React.FC = () => {
         activeSection={activeSection} 
       />
       
-      <div className="flex">
-        <Sidebar 
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-          sections={sections}
-          activeSection={activeSection}
-          onSectionChange={handleSectionChange}
-        />
-        
-        <main className="flex-1 p-6 lg:p-8">
-          {getActiveSectionContent()}
-        </main>
-      </div>
+      <main className="p-6 lg:p-8">
+        {getActiveSectionContent()}
+      </main>
     </div>
   );
 };
