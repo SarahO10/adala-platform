@@ -593,7 +593,7 @@ const CasesSection: React.FC = () => {
                 </div>
               </div>
             )}
-          </div>
+            </div>
         </div>
       </div>
 
@@ -1150,7 +1150,7 @@ const CasesSection: React.FC = () => {
                 </p>
                 <p className="text-gray-800 dark:text-gray-200">
                   <strong>العميل:</strong> {selectedCaseForAttachments.client}
-                </p>
+          </p>
         </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

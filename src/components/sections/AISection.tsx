@@ -493,8 +493,8 @@ const AISection: React.FC = () => {
                     <p className="text-xs opacity-70 mt-2 text-right">
                       {message.timestamp.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}
                     </p>
-                  </div>
-                </div>
+                      </div>
+                    </div>
               ))}
               
               {isTyping && (
@@ -527,8 +527,8 @@ const AISection: React.FC = () => {
                 >
                   {isRecording ? <Square className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
                 </button>
-                <input
-                  type="text"
+              <input
+                type="text"
                   placeholder="اكتب رسالتك هنا..."
                   className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-green-700 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-200"
                   value={inputMessage}
@@ -540,8 +540,8 @@ const AISection: React.FC = () => {
                   disabled={!inputMessage.trim()}
                   className="px-6 py-3 bg-green-700 hover:bg-green-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl transition-colors duration-200 flex items-center justify-center"
                 >
-                  <Send className="h-5 w-5" />
-                </button>
+                <Send className="h-5 w-5" />
+              </button>
               </div>
               {isRecording && (
                 <div className="mt-3 text-center">
