@@ -56,9 +56,11 @@ interface Attachment {
   id: string;
   name: string;
   type: 'document' | 'evidence' | 'contract' | 'other';
-  size: string;
+  size: string | number;
   uploadedAt: string;
   uploadedBy: string;
+  file?: File;
+  status?: 'uploading' | 'success' | 'error';
 }
 
 const CasesSection: React.FC = () => {
@@ -174,7 +176,8 @@ const CasesSection: React.FC = () => {
     type: '',
     assignedTo: '',
     fees: 0,
-    hearingLink: ''
+    hearingLink: '',
+    attachments: [] as { id: string; name: string; size: number; type: string; file: File; status: 'uploading' | 'success' | 'error' }[]
   });
 
   const [appealDays, setAppealDays] = useState(30);
@@ -271,7 +274,8 @@ const CasesSection: React.FC = () => {
       type: '',
       assignedTo: '',
       fees: 0,
-      hearingLink: ''
+      hearingLink: '',
+      attachments: []
     });
   };
 
@@ -600,47 +604,46 @@ const CasesSection: React.FC = () => {
       {/* Cases Table */}
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full min-w-[800px]">
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">الأولوية</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">رقم القضية</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">العميل</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">النوع</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">الموضوع</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">الحالة</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">الجلسة القادمة</th>
-
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">الإجراءات</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الأولوية</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">رقم القضية</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">العميل</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">النوع</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الموضوع</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الحالة</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الجلسة القادمة</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الإجراءات</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredCases.map((caseItem) => (
                 <tr key={caseItem.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${getPriorityColor(caseItem.priority)}`}>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4">
+                    <span className={`inline-flex px-2 sm:px-3 py-1 text-xs font-medium rounded-full ${getPriorityColor(caseItem.priority)}`}>
                       {caseItem.priority}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{caseItem.id}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">{caseItem.client}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">{caseItem.type}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-gray-900 dark:text-white">{caseItem.id}</td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 dark:text-white">{caseItem.client}</td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 dark:text-white">{caseItem.type}</td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 dark:text-white">
                     <div className="font-medium">{caseItem.title}</div>
                     <div className="text-gray-500 dark:text-gray-400 text-xs">{caseItem.court}</div>
                   </td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(caseItem.status)}`}>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4">
+                    <span className={`inline-flex px-2 sm:px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(caseItem.status)}`}>
                       {caseItem.status}
                     </span>
                     {caseItem.appealDaysLeft && caseItem.appealDaysLeft > 0 && (
                       <div className="mt-1 text-xs text-red-600 dark:text-red-400">
                         <Timer className="inline h-3 w-3 mr-1" />
                         {caseItem.appealDaysLeft} يوم
-                    </div>
+                      </div>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 dark:text-white">
                     <div>{caseItem.nextHearing}</div>
                     {caseItem.hearingLink && (
                       <div className="flex items-center text-xs text-blue-600 dark:text-blue-400">
@@ -648,19 +651,18 @@ const CasesSection: React.FC = () => {
                         <a href={caseItem.hearingLink} target="_blank" rel="noopener noreferrer" className="underline">
                           الجلسة
                         </a>
-                    </div>
+                      </div>
                     )}
                     {caseItem.assignedTo && (
                       <div className="text-xs text-gray-500 dark:text-gray-400">
                         {caseItem.assignedTo}
-                    </div>
+                      </div>
                     )}
                   </td>
-
-                  <td className="px-6 py-4 text-sm font-medium">
-                    <div className="flex items-center space-x-2 space-x-reverse">
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium">
+                    <div className="flex items-center space-x-1 sm:space-x-2 space-x-reverse">
                       <button 
-                        className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                        className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 p-1"
                         onClick={() => {
                           setSelectedCaseForAttachments(caseItem);
                           setShowAttachmentsModal(true);
@@ -670,14 +672,14 @@ const CasesSection: React.FC = () => {
                         <Paperclip className="h-4 w-4" />
                       </button>
                       <button 
-                        className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                        className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 p-1"
                         onClick={() => handleEditCase(caseItem)}
                       >
                         <Edit className="h-4 w-4" />
                       </button>
                       {caseItem.status === 'حكم ابتدائي' && (
                         <button 
-                          className="text-orange-600 hover:text-orange-900 dark:text-orange-400 dark:hover:text-orange-300"
+                          className="text-orange-600 hover:text-orange-900 dark:text-orange-400 dark:hover:text-orange-300 p-1"
                           onClick={() => {
                             setSelectedCaseForAppeal(caseItem);
                             setShowAppealModal(true);
@@ -688,7 +690,7 @@ const CasesSection: React.FC = () => {
                         </button>
                       )}
                       <button 
-                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 p-1"
                         onClick={() => deleteCase(caseItem.id)}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -861,8 +863,36 @@ const CasesSection: React.FC = () => {
                       id="file-upload"
                       onChange={(e) => {
                         const files = Array.from(e.target.files || []);
-                        // هنا يمكن إضافة منطق معالجة الملفات
-                        console.log('Files selected:', files);
+                        // إضافة الملفات المحددة إلى حالة المرفقات
+                        const newAttachments = files.map(file => ({
+                          id: (Date.now() + Math.random()).toString(),
+                          name: file.name,
+                          size: file.size,
+                          type: 'document' as const,
+                          file: file,
+                          status: 'uploading' as 'uploading' | 'success' | 'error',
+                          uploadedAt: new Date().toISOString().split('T')[0],
+                          uploadedBy: 'المستخدم الحالي'
+                        }));
+                        
+                        setNewCase(prev => ({
+                          ...prev,
+                          attachments: [...(prev.attachments || []), ...newAttachments]
+                        }));
+                        
+                        // محاكاة عملية الرفع
+                        newAttachments.forEach((attachment, index) => {
+                          setTimeout(() => {
+                            setNewCase(prev => ({
+                              ...prev,
+                              attachments: prev.attachments?.map(att => 
+                                att.id === attachment.id 
+                                  ? { ...att, status: 'success' as const }
+                                  : att
+                              ) || []
+                            }));
+                          }, 1000 + (index * 500)); // تأخير تدريجي لكل ملف
+                        });
                       }}
                     />
                     <label
@@ -873,6 +903,78 @@ const CasesSection: React.FC = () => {
                       اختيار الملفات
                     </label>
                   </div>
+                  
+                  {/* عرض الملفات المرفوعة */}
+                  {newCase.attachments && newCase.attachments.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">الملفات المرفوعة:</h4>
+                      {newCase.attachments.map((attachment) => (
+                        <div 
+                          key={attachment.id}
+                          className={`flex items-center justify-between p-3 rounded-lg border ${
+                            attachment.status === 'success' 
+                              ? 'border-green-200 bg-green-50 dark:border-green-700 dark:bg-green-900/20' 
+                              : attachment.status === 'error'
+                              ? 'border-red-200 bg-red-50 dark:border-red-700 dark:bg-red-900/20'
+                              : 'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-3 space-x-reverse">
+                            {attachment.status === 'success' ? (
+                              <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                              </div>
+                            ) : attachment.status === 'error' ? (
+                              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </div>
+                            ) : (
+                              <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
+                                <svg className="w-4 h-4 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                              </div>
+                            )}
+                            
+                            <div className="flex-1">
+                              <p className={`text-sm font-medium ${
+                                attachment.status === 'success' 
+                                  ? 'text-green-800 dark:text-green-200' 
+                                  : attachment.status === 'error'
+                                  ? 'text-red-800 dark:text-red-200'
+                                  : 'text-gray-800 dark:text-gray-200'
+                              }`}>
+                                {attachment.name}
+                              </p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                {(attachment.size / 1024 / 1024).toFixed(2)} MB
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <button
+                            onClick={() => {
+                              setNewCase(prev => ({
+                                ...prev,
+                                attachments: prev.attachments?.filter(att => att.id !== attachment.id) || []
+                              }));
+                            }}
+                            className="text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors duration-200"
+                            title="حذف الملف"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               

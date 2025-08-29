@@ -26,7 +26,8 @@ import {
   CheckCircle,
   AlertTriangle,
   Lock,
-  Unlock
+  Unlock,
+  User
 } from 'lucide-react';
 
 interface User {
@@ -267,6 +268,19 @@ const UsersSection: React.FC = () => {
   const totalRoles = roles.length;
   const systemAdmins = users.filter(u => u.role === 'مدير النظام').length;
 
+  const handleEditUser = (user: User) => {
+    setEditingUser(user);
+    setNewUser({
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      department: user.department,
+      permissions: user.permissions
+    });
+    setShowUserModal(true);
+  };
+
   return (
     <div className="space-y-12">
       {/* Hero Section */}
@@ -402,75 +416,65 @@ const UsersSection: React.FC = () => {
 
       {/* Users Table */}
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[700px]">
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">المستخدم</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">معلومات الاتصال</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">الدور</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">الحالة</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">آخر تسجيل</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">الإجراءات</th>
-                </tr>
-              </thead>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">المستخدم</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">البريد الإلكتروني</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الدور</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الحالة</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">آخر تسجيل دخول</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الإجراءات</th>
+              </tr>
+            </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredUsers.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
-                  <td className="px-6 py-4">
+                  <td className="px-3 sm:px-6 py-3 sm:py-4">
                     <div className="flex items-center space-x-3 space-x-reverse">
-                      <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-semibold">
-                        {user.avatar}
+                      <div className="w-8 h-8 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 rounded-full flex items-center justify-center">
+                        <User className="h-4 w-4 text-green-700 dark:text-green-300" />
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">{user.department}</div>
-                          </div>
-                        </div>
+                        <div className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">{user.name}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">{user.email}</div>
+                      </div>
+                    </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900 dark:text-white">
-                      <div className="flex items-center space-x-2 space-x-reverse mb-1">
-                        <Mail className="h-4 w-4 text-gray-400" />
-                        <span>{user.email}</span>
-                      </div>
-                      <div className="flex items-center space-x-2 space-x-reverse">
-                        <Phone className="h-4 w-4 text-gray-400" />
-                        <span>{user.phone}</span>
-                        </div>
-                      </div>
-                    </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900 dark:text-white">{user.role}</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">{user.permissions.length} صلاحية</div>
-                    </td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(user.status)}`}>
-                        {user.status}
-                      </span>
-                    </td>
-                  <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">{user.lastLogin}</td>
-                  <td className="px-6 py-4 text-sm font-medium">
-                      <div className="flex items-center space-x-2 space-x-reverse">
-                      <button className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">
-                        <Eye className="h-4 w-4" />
-                      </button>
-                      <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
-                          <Edit className="h-4 w-4" />
-                        </button>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 dark:text-white">{user.email}</td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 dark:text-white">{user.role}</td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4">
+                    <span className={`inline-flex px-2 sm:px-3 py-1 text-xs font-medium rounded-full ${
+                      user.status === 'نشط' 
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+                        : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                    }`}>
+                      {user.status}
+                    </span>
+                  </td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 dark:text-white">{user.lastLogin}</td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium">
+                    <div className="flex items-center space-x-1 sm:space-x-2 space-x-reverse">
                       <button 
-                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                        className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 p-1"
+                        onClick={() => handleEditUser(user)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </button>
+                      <button 
+                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 p-1"
                         onClick={() => deleteUser(user.id)}
                       >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Roles Section */}

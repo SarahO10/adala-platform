@@ -115,12 +115,37 @@ const DatabaseSection: React.FC = () => {
   const categories = ['الكل', 'قوانين جنائية', 'قوانين عمالية', 'قوانين تجارية', 'أحوال شخصية', 'قوانين مدنية', 'قوانين إدارية'];
   const types = ['الكل', 'قانون', 'فتوى', 'قرار', 'تعميم', 'مذكرة'];
 
+  // Helper functions
+  const getDocumentTypeColor = (type: string) => {
+    switch (type) {
+      case 'قانون': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+      case 'لائحة': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      case 'فتوى': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+      case 'حكم': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+    }
+  };
+
+  const downloadDocument = (id: string) => {
+    // Handle document download
+    console.log('Downloading document:', id);
+  };
+
+  const shareDocument = (id: string) => {
+    // Handle document sharing
+    console.log('Sharing document:', id);
+  };
+
+  const bookmarkDocument = (id: string) => {
+    // Handle document bookmarking
+    toggleBookmark(id);
+  };
+
   const filteredDocuments = documents.filter(doc => {
     const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = filterCategory === 'الكل' || doc.category === filterCategory;
-    const matchesType = filterType === 'الكل' || doc.type === filterType;
+                         doc.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = filterCategory === '' || doc.category === filterCategory;
+    const matchesType = filterType === '' || doc.type === filterType;
     return matchesSearch && matchesCategory && matchesType;
   });
 
@@ -266,118 +291,67 @@ const DatabaseSection: React.FC = () => {
       </div>
 
       {/* Documents Grid */}
-      <div className="space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            الوثائق القانونية
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            اكتشف مجموعة شاملة من القوانين واللوائح والفتاوى القانونية
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredDocuments.map((doc) => (
-            <div
-              key={doc.id}
-              className="group relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-soft border border-gray-200 dark:border-gray-700 hover:shadow-medium transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
-              onClick={() => handleDocumentClick(doc)}
-            >
-              {/* Decorative Corner */}
-              <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 rounded-bl-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <FileText className="h-6 w-6 text-green-600 dark:text-green-400" />
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleBookmark(doc.id);
-                    }}
-                    className={`p-2 rounded-lg transition-colors duration-200 ${
-                      doc.isBookmarked 
-                        ? 'text-yellow-500 bg-yellow-100 dark:bg-yellow-900/20' 
-                        : 'text-gray-400 hover:text-yellow-500 hover:bg-yellow-100 dark:hover:bg-yellow-900/20'
-                    }`}
-                  >
-                    <Bookmark className={`h-5 w-5 ${doc.isBookmarked ? 'fill-current' : ''}`} />
-                  </button>
-                </div>
-                
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2">
-                  {doc.title}
-                </h3>
-                
-                <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm leading-relaxed line-clamp-3">
-                  {doc.description}
-                </p>
-                
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">النوع:</span>
-                    <span className="font-medium text-gray-700 dark:text-gray-300">{doc.type}</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">التصنيف:</span>
-                    <span className="font-medium text-gray-700 dark:text-gray-300">{doc.category}</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">المؤلف:</span>
-                    <span className="font-medium text-gray-700 dark:text-gray-300">{doc.author}</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center space-x-4 space-x-reverse text-sm text-gray-500 dark:text-gray-400">
-                    <span className="flex items-center space-x-1 space-x-reverse">
-                      <Eye className="h-4 w-4" />
-                      <span>{doc.views}</span>
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[700px]">
+            <thead className="bg-gray-50 dark:bg-gray-700">
+              <tr>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">اسم الوثيقة</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">النوع</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">التاريخ</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الحجم</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">المشاهدات</th>
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              {filteredDocuments.map((doc) => (
+                <tr key={doc.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                  <td className="px-3 sm:px-6 py-3 sm:py-4">
+                    <div className="flex items-center space-x-3 space-x-reverse">
+                      <div className="w-8 h-8 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 rounded-lg flex items-center justify-center">
+                        <FileText className="h-4 w-4 text-green-700 dark:text-green-300" />
+                      </div>
+                      <div>
+                        <div className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">{doc.title}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">{doc.description}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4">
+                    <span className={`inline-flex px-2 sm:px-3 py-1 text-xs font-medium rounded-full ${getDocumentTypeColor(doc.type)}`}>
+                      {doc.type}
                     </span>
-                    <span className="flex items-center space-x-1 space-x-reverse">
-                      <Download className="h-4 w-4" />
-                      <span>{doc.downloads}</span>
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 space-x-reverse">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Handle download
-                      }}
-                      className="p-2 text-green-700 hover:text-green-800 dark:text-green-300 dark:hover:text-green-200 hover:bg-green-100 dark:hover:bg-green-900/20 rounded-lg transition-colors duration-200"
-                    >
-                      <Download className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Handle share
-                      }}
-                      className="p-2 text-green-700 hover:text-green-800 dark:text-green-300 dark:hover:text-green-200 hover:bg-green-100 dark:hover:bg-green-900/20 rounded-lg transition-colors duration-200"
-                    >
-                      <Share className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {doc.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
+                  </td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 dark:text-white">{doc.publishDate}</td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 dark:text-white">{doc.downloads.toLocaleString()}</td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 dark:text-white">{doc.views.toLocaleString()}</td>
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium">
+                    <div className="flex items-center space-x-1 sm:space-x-2 space-x-reverse">
+                      <button 
+                        className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 p-1"
+                        onClick={() => downloadDocument(doc.id)}
+                      >
+                        <Download className="h-4 w-4" />
+                      </button>
+                      <button 
+                        className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 p-1"
+                        onClick={() => shareDocument(doc.id)}
+                      >
+                        <Share className="h-4 w-4" />
+                      </button>
+                      <button 
+                        className="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300 p-1"
+                        onClick={() => bookmarkDocument(doc.id)}
+                      >
+                        <Bookmark className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
