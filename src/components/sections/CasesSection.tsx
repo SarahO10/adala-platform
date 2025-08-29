@@ -314,6 +314,7 @@ const CasesSection: React.FC = () => {
   const handleStatusChange = (newStatus: Case['status']) => {
     if (editingCase) {
       let updatedCase = { ...editingCase, status: newStatus };
+      let updatedEditData = { ...editCaseData, status: newStatus };
       
       // If changing to appeal status, show appeal modal
       if (newStatus === 'محكوم بحكم استئناف') {
@@ -323,15 +324,25 @@ const CasesSection: React.FC = () => {
         return;
       }
       
-      // Reset appeal data if changing from appeal status
+      // Reset appeal data and priority if changing from appeal status
       if (newStatus !== 'محكوم بحكم استئناف' as Case['status']) {
         updatedCase = {
           ...updatedCase,
           appealDeadline: undefined,
           appealDaysLeft: undefined
         };
+        
+        // إذا تم تغيير الحالة إلى "جديدة"، إعادة تعيين الأولوية إلى "متوسط"
+        if (newStatus === 'جديدة') {
+          updatedCase.priority = 'متوسط';
+          updatedEditData.priority = 'متوسط';
+        }
       }
       
+      // تحديث حالة التعديل
+      setEditCaseData(updatedEditData);
+      
+      // تحديث القضية
       updateCase(updatedCase);
     }
   };
