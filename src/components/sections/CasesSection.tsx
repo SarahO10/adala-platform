@@ -423,7 +423,7 @@ const CasesSection: React.FC = () => {
     }
   };
 
-  const getAttachmentTypeColor = (type: Attachment['type']) => {
+  const getAttachmentTypeColor = (type: string) => {
     switch (type) {
       case 'document': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
       case 'evidence': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
@@ -1245,9 +1245,9 @@ const CasesSection: React.FC = () => {
       {/* Attachments Modal */}
       {showAttachmentsModal && selectedCaseForAttachments && (
         <div className="modal-overlay">
-          <div className="modal-content p-8 max-w-2xl">
+          <div className="modal-content p-8 max-w-4xl">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">المرفقات</h3>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">إدارة المرفقات</h3>
               <button
                 onClick={() => setShowAttachmentsModal(false)}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -1263,26 +1263,108 @@ const CasesSection: React.FC = () => {
                 </p>
                 <p className="text-gray-800 dark:text-gray-200">
                   <strong>العميل:</strong> {selectedCaseForAttachments.client}
-          </p>
-        </div>
+                </p>
+              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {selectedCaseForAttachments.attachments.map(attachment => (
-                  <div key={attachment.id} className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-soft border border-gray-200 dark:border-gray-600">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getAttachmentTypeColor(attachment.type)}`}>
-                        {attachment.type}
-                      </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">{attachment.size}</span>
-                    </div>
-                    <p className="text-gray-900 dark:text-white font-medium">{attachment.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">تم الرفع بواسطة {attachment.uploadedBy} في {attachment.uploadedAt}</p>
-                    <div className="flex items-center mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                      <Paperclip className="h-4 w-4 mr-1" />
-                      <a href="#" className="underline">تحميل</a>
-                    </div>
+              {/* إضافة مرفق جديد */}
+              <div className="bg-white dark:bg-gray-700 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">إضافة مرفق جديد</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">اسم المرفق</label>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="اسم المرفق"
+                      value={newAttachment.name}
+                      onChange={(e) => setNewAttachment({...newAttachment, name: e.target.value})}
+                    />
                   </div>
-                ))}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">نوع المرفق</label>
+                    <select
+                      className="input-field"
+                      value={newAttachment.type}
+                      onChange={(e) => setNewAttachment({...newAttachment, type: e.target.value as Attachment['type']})}
+                    >
+                      <option value="document">وثيقة</option>
+                      <option value="evidence">دليل</option>
+                      <option value="contract">عقد</option>
+                      <option value="other">أخرى</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">الحجم</label>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="مثال: 2.5 MB"
+                      value={newAttachment.size}
+                      onChange={(e) => setNewAttachment({...newAttachment, size: e.target.value})}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">رفع بواسطة</label>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="اسم الشخص"
+                      value={newAttachment.uploadedBy}
+                      onChange={(e) => setNewAttachment({...newAttachment, uploadedBy: e.target.value})}
+                    />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <button
+                    onClick={() => addAttachment()}
+                    className="btn-primary flex items-center space-x-2 space-x-reverse"
+                    disabled={!newAttachment.name || !newAttachment.size || !newAttachment.uploadedBy}
+                  >
+                    <Plus className="h-4 w-4" />
+                    <span>إضافة المرفق</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* عرض المرفقات الموجودة */}
+              <div>
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">المرفقات الموجودة</h4>
+                {selectedCaseForAttachments.attachments && selectedCaseForAttachments.attachments.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {selectedCaseForAttachments.attachments.map(attachment => (
+                      <div key={attachment.id} className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-soft border border-gray-200 dark:border-gray-600">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getAttachmentTypeColor(attachment.type)}`}>
+                            {attachment.type}
+                          </span>
+                          <div className="flex items-center space-x-2 space-x-reverse">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">{attachment.size}</span>
+                            <button
+                              onClick={() => deleteAttachment(selectedCaseForAttachments.id, attachment.id)}
+                              className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                              title="حذف المرفق"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                        <p className="text-gray-900 dark:text-white font-medium">{attachment.name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          تم الرفع بواسطة {attachment.uploadedBy} في {attachment.uploadedAt}
+                        </p>
+                        <div className="flex items-center mt-2 text-gray-600 dark:text-gray-400 text-sm">
+                          <Paperclip className="h-4 w-4 mr-1" />
+                          <a href="#" className="underline">تحميل</a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <Paperclip className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                    <p>لا توجد مرفقات لهذه القضية</p>
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end space-x-3 space-x-reverse">
